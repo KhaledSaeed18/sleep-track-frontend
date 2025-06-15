@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useAuth } from "@/hooks/auth/useAuth";
 
 export default function Header() {
+    const { isAuthenticated } = useAuth();
+
     return (
         <header className="navbar bg-base-200 sticky top-0 shadow z-50 h-10">
             <div className="container mx-auto px-4">
@@ -15,9 +18,15 @@ export default function Header() {
                     </Link>
                 </div>
                 <div className="navbar-end">
-                    <Link href="/auth/signup" className="btn btn-primary">
-                        Sign Up
-                    </Link>
+                    {isAuthenticated ? (
+                        <Link href="/dashboard" className="btn btn-primary">
+                            Dashboard
+                        </Link>
+                    ) : (
+                        <Link href="/auth/signup" className="btn btn-primary">
+                            Sign Up
+                        </Link>
+                    )}
                 </div>
             </div>
         </header>
