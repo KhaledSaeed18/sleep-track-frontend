@@ -1,27 +1,20 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { authService } from '@/services/auth/auth.service';
-import {
-    AuthState,
-    AuthActions,
-    LoginRequest,
-    SignupRequest,
-    User
-} from '@/types/auth/auth.types';
+import { AuthState, AuthActions, LoginRequest, SignupRequest } from '@/types/auth/auth.types';
 
 type AuthStore = AuthState & AuthActions;
 
 export const useAuthStore = create<AuthStore>()(
     persist(
         (set, get) => ({
-            // Initial state
             user: null,
             token: null,
             isAuthenticated: false,
             isLoading: false,
+            isHydrated: false,
             error: null,
 
-            // Actions
             login: async (credentials: LoginRequest) => {
                 try {
                     set({ isLoading: true, error: null });
@@ -53,7 +46,6 @@ export const useAuthStore = create<AuthStore>()(
 
                     const response = await authService.signup(userData);
 
-                    // After successful signup, automatically login
                     await get().login({
                         email: userData.email,
                         password: userData.password,
@@ -79,20 +71,30 @@ export const useAuthStore = create<AuthStore>()(
 
             clearError: () => {
                 set({ error: null });
+            }, setLoading: (loading: boolean) => {
+                set({ isLoading: loading });
             },
 
-            setLoading: (loading: boolean) => {
-                set({ isLoading: loading });
+            setHydrated: (hydrated: boolean) => {
+                set({ isHydrated: hydrated });
             },
         }),
         {
-            name: 'sleep-track-auth', // unique name for localStorage key
-            storage: createJSONStorage(() => localStorage), // or sessionStorage
+            name: 'sleep-track-auth',
+            storage: createJSONStorage(() => localStorage),
             partialize: (state) => ({
                 user: state.user,
                 token: state.token,
                 isAuthenticated: state.isAuthenticated,
-            }), // only persist these fields
+            }),
+            onRehydrateStorage: () => (state, error) => {
+                if (!error && state) {
+                    state.setHydrated(true);
+                } else {
+                    const store = useAuthStore.getState();
+                    store.setHydrated(true);
+                }
+            },
         }
     )
 );

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useAuthStore } from '@/store';
 import { LoginRequest, SignupRequest } from '@/types/auth/auth.types';
 
@@ -8,12 +8,14 @@ export const useAuth = () => {
         token,
         isAuthenticated,
         isLoading,
+        isHydrated,
         error,
         login: storeLogin,
         signup: storeSignup,
         logout: storeLogout,
         clearError,
         setLoading,
+        setHydrated,
     } = useAuthStore();
 
     const login = useCallback(
@@ -55,27 +57,44 @@ export const useAuth = () => {
         return {
             Authorization: `Bearer ${token}`,
         };
-    }, [token]);
-
-    const isTokenExpired = useCallback(() => {
+    }, [token]); const isTokenExpired = useCallback(() => {
         if (!token) return true;
 
         try {
             // Decode JWT token to check expiration
             const payload = JSON.parse(atob(token.split('.')[1]));
             const currentTime = Date.now() / 1000;
-            return payload.exp < currentTime;
+            // Add 30 seconds buffer to account for request time
+            return payload.exp < (currentTime + 30);
         } catch {
             return true;
         }
     }, [token]);
 
-    return {
+    // Auto-logout when token expires
+    const checkTokenExpiration = useCallback(() => {
+        if (token && isTokenExpired()) {
+            console.log('Token expired, logging out...');
+            storeLogout();
+        }
+    }, [token, isTokenExpired, storeLogout]);
+
+    // Check token expiration on mount and periodically
+    useEffect(() => {
+        if (isHydrated && token) {
+            checkTokenExpiration();
+
+            // Check every 5 minutes
+            const interval = setInterval(checkTokenExpiration, 5 * 60 * 1000);
+            return () => clearInterval(interval);
+        }
+    }, [isHydrated, token, checkTokenExpiration]); return {
         // State
         user,
         token,
         isAuthenticated: isAuthenticated && !isTokenExpired(),
         isLoading,
+        isHydrated,
         error,
 
         // Actions
@@ -84,6 +103,7 @@ export const useAuth = () => {
         logout,
         clearError,
         setLoading,
+        setHydrated,
 
         // Utilities
         getAuthHeaders,
