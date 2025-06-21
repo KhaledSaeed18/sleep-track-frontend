@@ -22,7 +22,7 @@ export default function SignUpPage() {
     // Redirect if already authenticated
     useEffect(() => {
         if (isAuthenticated) {
-            router.push('/');
+            router.push('/dashboard');
         }
     }, [isAuthenticated, router]);
 
@@ -42,7 +42,7 @@ export default function SignUpPage() {
         const result = await signup(signupData);
 
         if (result.success) {
-            router.push('/');
+            router.push('/dashboard');
         }
     };
 
