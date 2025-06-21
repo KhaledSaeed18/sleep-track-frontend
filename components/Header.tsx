@@ -11,9 +11,6 @@ export default function Header() {
             <div className="container mx-auto px-4">
                 <div className="navbar-start">
                     <Link href="/" className="flex gap-2 items-center text-xl">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0 9c0 1.657-4.03 3-9 3s-9-1.343-9-3m9 0V12m0 9v-9" />
-                        </svg>
                         Sleep Tracker
                     </Link>
                 </div>

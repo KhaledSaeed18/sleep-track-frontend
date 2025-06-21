@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="container mx-auto px-4">
@@ -11,9 +13,11 @@ export default function Home() {
               Track your sleep patterns, analyze your rest quality, and improve your overall health with our comprehensive sleep tracking application.
             </p>
             <div className="flex gap-4 justify-center">
-              <button className="btn btn-primary">
-                Get Started
-              </button>
+              <Link href="/auth/signup">
+                <button className="btn btn-primary">
+                  Get Started
+                </button>
+              </Link>
             </div>
           </div>
         </div>
