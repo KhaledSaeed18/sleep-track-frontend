@@ -33,7 +33,7 @@ export default function Home() {
         {/* Hero Content with floating animation */}
         <div className="hero-content text-center relative z-10">
           <div className="max-w-md">
-            <h1 className="text-5xl font-bold text-primary mb-4 drop-shadow-lg animate-float-slow">
+            <h1 className="text-5xl font-bold text-primary mb-4 drop-shadow-lg">
               Welcome to{" "}
               <span className="inline-flex font-extrabold">Sleep Track</span>
             </h1>
