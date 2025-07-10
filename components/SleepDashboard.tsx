@@ -25,6 +25,7 @@ const SleepDashboard: React.FC = () => {
         quality_rating: QUALITY_RATING.MIN
     });
     const [formErrors, setFormErrors] = useState<string[]>([]);
+    const [successMessage, setSuccessMessage] = useState<string>('');
 
     // Fetch data on mount
     React.useEffect(() => {
@@ -54,6 +55,8 @@ const SleepDashboard: React.FC = () => {
             getStats();
             getWeeklySummary();
             setForm({ sleep_start: '', sleep_end: '', quality_rating: QUALITY_RATING.MIN });
+            setSuccessMessage('Sleep session logged successfully!');
+            setTimeout(() => setSuccessMessage(''), 3000);
         }
     };
 
@@ -91,15 +94,31 @@ const SleepDashboard: React.FC = () => {
                         </div>
                         <div className="form-control space-x-2">
                             <label className="label">Quality Rating:</label>
-                            <select name="quality_rating" value={form.quality_rating} onChange={handleChange} className="select select-bordered">
-                                {[1, 2, 3, 4, 5].map(r => <option key={r} value={r}>{r}</option>)}
-                            </select>
+                            <div className="rating">
+                                {[1, 2, 3, 4, 5].map(r => (
+                                    <input
+                                        key={r}
+                                        type="radio"
+                                        name="quality_rating"
+                                        className="mask mask-star-2 bg-orange-400"
+                                        aria-label={`${r} star`}
+                                        value={r}
+                                        checked={Number(form.quality_rating) === r}
+                                        onChange={handleChange}
+                                    />
+                                ))}
+                            </div>
                         </div>
                         {formErrors.length > 0 && (
                             <div className="alert alert-error">
                                 <ul className="list-disc ml-4">
                                     {formErrors.map((err, i) => <li key={i}>{err}</li>)}
                                 </ul>
+                            </div>
+                        )}
+                        {successMessage && (
+                            <div className="alert alert-success">
+                                {successMessage}
                             </div>
                         )}
                         <button type="submit" className="btn btn-primary" disabled={createLoading}>

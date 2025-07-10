@@ -1,9 +1,11 @@
 "use client";
 
 import { useAuth } from "@/hooks/auth/useAuth";
+import { useState } from "react";
 
 export default function UserProfileCard() {
     const { user, userFullName, userInitials } = useAuth();
+    const [showDetails, setShowDetails] = useState(false);
 
     if (!user) {
         return null;
@@ -24,30 +26,36 @@ export default function UserProfileCard() {
                     </div>
                 </div>
 
-                <div className="divider"></div>
+                <button
+                    className="btn btn-sm btn-outline mt-4"
+                    onClick={() => setShowDetails((prev) => !prev)}
+                >
+                    {showDetails ? "Hide Details" : "Show Details"}
+                </button>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    <div className="stat">
-                        <div className="stat-title">User ID</div>
-                        <div className="stat-value text-lg">{user.id}</div>
-                    </div>
-                    <div className="stat">
-                        <div className="stat-title">Date of Birth</div>
-                        <div className="stat-value text-lg">
-                            {new Date(user.date_of_birth).toLocaleDateString()}
+                {showDetails && (
+                    <>
+                        <div className="divider"></div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                            <div className="stat">
+                                <div className="stat-title">Date of Birth</div>
+                                <div className="stat-value text-lg">
+                                    {new Date(user.date_of_birth).toLocaleDateString()}
+                                </div>
+                            </div>
+                            <div className="stat">
+                                <div className="stat-title">Member Since</div>
+                                <div className="stat-value text-lg">
+                                    {new Date(user.created_at).toLocaleString()}
+                                </div>
+                            </div>
+                            <div className="stat">
+                                <div className="stat-title">Account Status</div>
+                                <div className="stat-value text-lg text-success">Active</div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="stat">
-                        <div className="stat-title">Member Since</div>
-                        <div className="stat-value text-lg">
-                            {new Date(user.created_at).toLocaleDateString()}
-                        </div>
-                    </div>
-                    <div className="stat">
-                        <div className="stat-title">Account Status</div>
-                        <div className="stat-value text-lg text-success">Active</div>
-                    </div>
-                </div>
+                    </>
+                )}
             </div>
         </div>
     );
