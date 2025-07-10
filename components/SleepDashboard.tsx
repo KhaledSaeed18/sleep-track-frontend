@@ -5,7 +5,7 @@ import { QUALITY_RATING } from '@/types/sleep/sleep.types';
 import { sleepService } from '@/services/sleep/sleep.service';
 import { Bar, Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, PointElement, LineElement, ArcElement } from 'chart.js';
-import { MdBedtime, MdBarChart, MdCalendarToday, MdHotel, MdAccessTime, MdStar, MdTrendingUp, MdTrendingDown, MdAlarm, MdWbSunny, MdScore } from 'react-icons/md';
+import { MdBedtime, MdBarChart, MdCalendarToday, MdHotel, MdAccessTime, MdStar, MdTrendingUp, MdTrendingDown, MdAlarm, MdWbSunny, MdScore, MdWarning } from 'react-icons/md';
 import { FaListUl } from 'react-icons/fa';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, PointElement, LineElement, ArcElement);
@@ -26,6 +26,10 @@ const SleepDashboard: React.FC = () => {
     });
     const [formErrors, setFormErrors] = useState<string[]>([]);
     const [successMessage, setSuccessMessage] = useState<string>('');
+
+    // Modal state for delete confirmation
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [sessionToDelete, setSessionToDelete] = useState<number | null>(null);
 
     // Fetch data on mount
     React.useEffect(() => {
@@ -60,11 +64,34 @@ const SleepDashboard: React.FC = () => {
         }
     };
 
-    const handleDelete = async (id: number) => {
-        await deleteSession(id);
-        getSessions();
-        getStats();
-        getWeeklySummary();
+    const handleDelete = async (sessionId: number) => {
+        setSuccessMessage("");
+        setFormErrors([]);
+        try {
+            await deleteSession(sessionId);
+            await getSessions();
+            await getStats();
+            await getWeeklySummary();
+            setSuccessMessage("Sleep session deleted successfully!");
+            setTimeout(() => setSuccessMessage(''), 3000);
+        } catch (err: any) {
+            setFormErrors([err.message || "Failed to delete sleep session"]);
+        }
+    }
+
+    const openDeleteModal = (id: number) => {
+        setSessionToDelete(id);
+        setShowDeleteModal(true);
+    };
+    const closeDeleteModal = () => {
+        setSessionToDelete(null);
+        setShowDeleteModal(false);
+    };
+    const confirmDelete = async () => {
+        if (sessionToDelete !== null) {
+            await handleDelete(sessionToDelete);
+            closeDeleteModal();
+        }
     };
 
     // Chart data
@@ -79,6 +106,23 @@ const SleepDashboard: React.FC = () => {
 
     return (
         <div className="space-y-8">
+            {/* DaisyUI Delete Confirmation Modal */}
+            {showDeleteModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-40">
+                    <div className="modal modal-open">
+                        <div className="modal-box">
+                            <h3 className="font-bold text-lg flex items-center gap-2"><MdWarning className="text-warning text-2xl" /> Confirm Delete</h3>
+                            <p className="py-4">Are you sure you want to delete this sleep session? This action cannot be undone.</p>
+                            <div className="modal-action">
+                                <button className="btn btn-error" onClick={confirmDelete} disabled={deleteLoading}>
+                                    {deleteLoading ? <LoadingSpinner size="sm" /> : 'Delete'}
+                                </button>
+                                <button className="btn" onClick={closeDeleteModal}>Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
             {/* Create Sleep Session */}
             <div className="card bg-base-200 shadow-xl">
                 <div className="card-body">
@@ -155,8 +199,8 @@ const SleepDashboard: React.FC = () => {
                                             <td>{s.quality_rating}</td>
                                             <td>{sleepService.formatDuration(s.sleep_start, s.sleep_end)}</td>
                                             <td>
-                                                <button className="btn btn-error btn-xs" onClick={() => handleDelete(s.id)} disabled={deleteLoading}>
-                                                    {deleteLoading ? <LoadingSpinner size="sm" /> : 'Delete'}
+                                                <button className="btn btn-error btn-xs" onClick={() => openDeleteModal(s.id)} disabled={deleteLoading}>
+                                                    Delete
                                                 </button>
                                             </td>
                                         </tr>
