@@ -182,6 +182,7 @@ const SleepDashboard: React.FC = () => {
                             <table className="table">
                                 <thead>
                                     <tr>
+                                        <th>#</th>
                                         <th>Date</th>
                                         <th>Start</th>
                                         <th>End</th>
@@ -191,8 +192,9 @@ const SleepDashboard: React.FC = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sessions && sessions.length > 0 ? sessions.map(s => (
+                                    {sessions && sessions.length > 0 ? sessions.map((s, idx) => (
                                         <tr key={s.id}>
+                                            <td>{idx + 1}</td>
                                             <td>{new Date(s.sleep_start).toLocaleDateString()}</td>
                                             <td>{new Date(s.sleep_start).toLocaleTimeString()}</td>
                                             <td>{new Date(s.sleep_end).toLocaleTimeString()}</td>
@@ -204,7 +206,7 @@ const SleepDashboard: React.FC = () => {
                                                 </button>
                                             </td>
                                         </tr>
-                                    )) : <tr><td colSpan={6}>No sessions found.</td></tr>}
+                                    )) : <tr><td colSpan={7}>No sessions found.</td></tr>}
                                 </tbody>
                             </table>
                         </div>
