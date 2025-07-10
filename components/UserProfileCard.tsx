@@ -12,7 +12,7 @@ export default function UserProfileCard() {
     return (
         <div className="card bg-base-200 shadow-xl mb-8">
             <div className="card-body">
-                <div className="flex items-center gap-4 mb-4">
+                <div className="flex items-center gap-4">
                     <div className="avatar avatar-placeholder">
                         <div className="bg-neutral text-neutral-content w-12 rounded-full">
                             <span className="text-xl">{userInitials}</span>
@@ -26,7 +26,7 @@ export default function UserProfileCard() {
 
                 <div className="divider"></div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <div className="stat">
                         <div className="stat-title">User ID</div>
                         <div className="stat-value text-lg">{user.id}</div>
