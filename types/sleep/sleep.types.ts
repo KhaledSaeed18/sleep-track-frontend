@@ -48,6 +48,11 @@ export interface WeeklySummary {
     quality_trend: string;
 }
 
+export interface GetSleepSessionsResponse {
+    count: number;
+    sessions: SleepSession[];
+}
+
 // Error types (reusing from auth types)
 export interface ValidationError {
     loc: (string | number)[];
@@ -62,6 +67,7 @@ export interface ValidationErrorResponse {
 // Store types for sleep state management
 export interface SleepState {
     sessions: SleepSession[];
+    count: number;
     stats: SleepStats | null;
     weeklySummary: WeeklySummary | null;
     currentSession: SleepSession | null;
@@ -71,7 +77,7 @@ export interface SleepState {
 
 export interface SleepActions {
     createSession: (sessionData: CreateSleepSessionRequest) => Promise<SleepSession>;
-    getSessions: (params?: GetSleepSessionsParams) => Promise<SleepSession[]>;
+    getSessions: (params?: GetSleepSessionsParams) => Promise<GetSleepSessionsResponse>;
     getStats: () => Promise<SleepStats>;
     getTimeline: (params?: GetTimelineParams) => Promise<SleepSession[]>;
     getWeeklySummary: () => Promise<WeeklySummary>;

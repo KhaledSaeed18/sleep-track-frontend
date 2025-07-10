@@ -5,7 +5,8 @@ import {
     GetSleepSessionsParams,
     SleepStats,
     GetTimelineParams,
-    WeeklySummary
+    WeeklySummary,
+    GetSleepSessionsResponse
 } from '@/types/sleep/sleep.types';
 
 class SleepService {
@@ -35,9 +36,9 @@ class SleepService {
     /**
      * Get user's sleep sessions with optional pagination
      */
-    async getSessions(params?: GetSleepSessionsParams): Promise<SleepSession[]> {
+    async getSessions(params?: GetSleepSessionsParams): Promise<GetSleepSessionsResponse> {
         try {
-            const response = await api.get<SleepSession[]>(
+            const response = await api.get<GetSleepSessionsResponse>(
                 this.SLEEP_ENDPOINTS.BASE,
                 params
             );

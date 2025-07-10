@@ -6,7 +6,8 @@ import {
     GetSleepSessionsParams,
     SleepStats,
     GetTimelineParams,
-    WeeklySummary
+    WeeklySummary,
+    GetSleepSessionsResponse
 } from '@/types/sleep/sleep.types';
 
 // Create Sleep Session
@@ -37,14 +38,16 @@ export function useCreateSleepSession() {
 export function useGetSleepSessions() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [data, setData] = useState<SleepSession[]>([]);
+    const [sessions, setSessions] = useState<SleepSession[]>([]);
+    const [count, setCount] = useState<number>(0);
 
     const getSessions = useCallback(async (params?: GetSleepSessionsParams) => {
         setLoading(true);
         setError(null);
         try {
             const result = await sleepService.getSessions(params);
-            setData(result);
+            setSessions(result.sessions);
+            setCount(result.count);
             return result;
         } catch (err: any) {
             setError(err.message || 'Failed to fetch sleep sessions');
@@ -54,7 +57,7 @@ export function useGetSleepSessions() {
         }
     }, []);
 
-    return { getSessions, loading, error, data };
+    return { getSessions, loading, error, sessions, count };
 }
 
 // Get Sleep Stats

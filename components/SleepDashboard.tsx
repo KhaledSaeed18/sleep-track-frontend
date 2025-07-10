@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCreateSleepSession, useGetSleepSessions, useDeleteSleepSession, useGetSleepStats, useGetWeeklySummary, useGetSleepTimeline } from '@/hooks/sleep/useSleep';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { QUALITY_RATING } from '@/types/sleep/sleep.types';
@@ -13,7 +13,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 const SleepDashboard: React.FC = () => {
     // Hooks
     const { createSession, loading: createLoading, error: createError } = useCreateSleepSession();
-    const { getSessions, loading: sessionsLoading, error: sessionsError, data: sessions } = useGetSleepSessions();
+    const { getSessions, loading: sessionsLoading, error: sessionsError, sessions, count } = useGetSleepSessions();
     const { deleteSession, loading: deleteLoading, error: deleteError } = useDeleteSleepSession();
     const { getStats, loading: statsLoading, error: statsError, data: stats } = useGetSleepStats();
     const { getWeeklySummary, loading: weeklyLoading, error: weeklyError, data: weeklySummary } = useGetWeeklySummary();
@@ -31,12 +31,30 @@ const SleepDashboard: React.FC = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [sessionToDelete, setSessionToDelete] = useState<number | null>(null);
 
+    // Pagination state
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(10); // Default records per page
+
     // Fetch data on mount
     React.useEffect(() => {
         getSessions();
         getStats();
         getWeeklySummary();
     }, []);
+
+    // Sleep sessions hook
+    // Fetch sessions with pagination
+    useEffect(() => {
+        const fetchSessions = async () => {
+            try {
+                await getSessions({ skip: (page - 1) * limit, limit });
+                // count is now handled by hook
+            } catch (err) {
+                // Error handled by hook
+            }
+        };
+        fetchSessions();
+    }, [page, limit, getSessions]);
 
     // Handlers
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -103,6 +121,17 @@ const SleepDashboard: React.FC = () => {
             backgroundColor: ['#60a5fa', '#34d399', '#fbbf24']
         }]
     } : undefined;
+
+    // Handle limit change
+    const handleLimitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setLimit(Number(e.target.value));
+        setPage(1); // Reset to first page
+    };
+
+    // Pagination controls
+    const totalPages = Math.ceil(count / limit) || 1;
+    const handlePrevPage = () => setPage((p) => Math.max(1, p - 1));
+    const handleNextPage = () => setPage((p) => Math.min(totalPages, p + 1));
 
     return (
         <div className="space-y-8">
@@ -177,6 +206,12 @@ const SleepDashboard: React.FC = () => {
             <div className="card bg-base-200 shadow-xl">
                 <div className="card-body">
                     <h2 className="card-title"><FaListUl className="text-xl mr-2" /> Sleep Sessions</h2>
+                    <div className="flex items-center gap-4 mb-2">
+                        <label htmlFor="limit" className="font-semibold">Records per page:</label>
+                        <select id="limit" value={limit} onChange={handleLimitChange} className="select select-bordered w-24">
+                            {[5, 10, 20, 50].map(val => <option key={val} value={val}>{val}</option>)}
+                        </select>
+                    </div>
                     {sessionsLoading ? <LoadingSpinner /> : (
                         <div className="overflow-x-auto">
                             <table className="table">
@@ -194,7 +229,7 @@ const SleepDashboard: React.FC = () => {
                                 <tbody>
                                     {sessions && sessions.length > 0 ? sessions.map((s, idx) => (
                                         <tr key={s.id}>
-                                            <td>{idx + 1}</td>
+                                            <td>{(page - 1) * limit + idx + 1}</td>
                                             <td>{new Date(s.sleep_start).toLocaleDateString()}</td>
                                             <td>{new Date(s.sleep_start).toLocaleTimeString()}</td>
                                             <td>{new Date(s.sleep_end).toLocaleTimeString()}</td>
@@ -211,6 +246,12 @@ const SleepDashboard: React.FC = () => {
                             </table>
                         </div>
                     )}
+                    {/* Pagination Controls */}
+                    <div className="flex items-center justify-between mt-4">
+                        <button className="btn btn-outline" onClick={handlePrevPage} disabled={page === 1}>Prev</button>
+                        <span>Page {page} of {totalPages}</span>
+                        <button className="btn btn-outline" onClick={handleNextPage} disabled={page === totalPages}>Next</button>
+                    </div>
                     {sessionsError && <div className="text-error">{sessionsError}</div>}
                 </div>
             </div>
