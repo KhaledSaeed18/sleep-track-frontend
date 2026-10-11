@@ -61,7 +61,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <div className="mx-auto w-full max-w-7xl">{children}</div>
           </main>
         </div>
-        <div className="drawer-side z-50">
+        <div className="drawer-side z-50 print:hidden">
           <label htmlFor={DRAWER_ID} className="drawer-overlay" aria-label="Close navigation" />
           <Sidebar mobile={!desktop} onNavigate={() => setDrawerOpen(false)} />
         </div>

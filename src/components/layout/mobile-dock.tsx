@@ -19,7 +19,7 @@ export function MobileDock({ drawerId }: { drawerId: string }) {
 
   return (
     <nav
-      className="dock z-40 dock-md border-t border-(--hairline) bg-base-100/95 backdrop-blur-md lg:hidden"
+      className="dock z-40 dock-md border-t border-(--hairline) bg-base-100/95 backdrop-blur-md lg:hidden print:hidden"
       aria-label="Quick navigation"
     >
       {ITEMS.slice(0, 2).map((item) => (

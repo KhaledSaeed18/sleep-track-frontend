@@ -20,7 +20,7 @@ export function Topbar({ drawerId }: { drawerId: string }) {
   const mod = useModKey();
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-2 border-b border-(--hairline) bg-base-200/80 px-4 backdrop-blur-md sm:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-2 border-b border-(--hairline) bg-base-200/80 px-4 backdrop-blur-md sm:px-6 print:hidden">
       <label
         htmlFor={drawerId}
         className="btn btn-square btn-ghost btn-sm lg:hidden"
