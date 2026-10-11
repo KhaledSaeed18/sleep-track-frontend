@@ -24,10 +24,10 @@ A simple, retro-styled web application for tracking your sleep, built with **Nex
 ## 🖼️ Demo
 
 ![Home Page](demo/sleepTrack-home.png)
-*Home page with retro design*
+_Home page with retro design_
 
 ![Dashboard](demo/sleepTrack-dashboard.png)
-*Sleep dashboard with analytics and session list*
+_Sleep dashboard with analytics and session list_
 
 ## 🔗 Backend
 
