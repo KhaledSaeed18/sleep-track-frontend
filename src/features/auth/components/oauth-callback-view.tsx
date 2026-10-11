@@ -9,7 +9,7 @@ import { DEFAULT_AUTHED_ROUTE } from '@/lib/auth/constants';
 import { isSafeRedirect } from '@/lib/utils';
 import { establishSession } from '../lib/session';
 import { AuthCard } from './auth-card';
-import { FormAlert } from './form-alert';
+import { FormAlert } from '@/components/ui/form-alert';
 
 const ERRORS: Record<string, string> = {
   access_denied: 'You cancelled the Google sign-in.',

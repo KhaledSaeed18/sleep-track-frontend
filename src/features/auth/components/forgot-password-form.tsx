@@ -10,7 +10,7 @@ import { applyServerErrors } from '@/lib/forms';
 import { authApi } from '../api';
 import { forgotPasswordSchema, type ForgotPasswordValues } from '../schemas';
 import { AuthCard } from './auth-card';
-import { FormAlert } from './form-alert';
+import { FormAlert } from '@/components/ui/form-alert';
 
 export function ForgotPasswordForm() {
   const request = useMutation({

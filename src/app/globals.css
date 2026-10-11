@@ -134,9 +134,11 @@
     --glow-primary: color-mix(in oklab, var(--color-primary) 22%, transparent);
     --glow-secondary: color-mix(in oklab, var(--color-secondary) 20%, transparent);
     --hairline: color-mix(in oklab, var(--color-base-content) 9%, transparent);
-    --chart-1: var(--color-primary);
-    --chart-2: var(--color-secondary);
-    --chart-3: var(--color-accent);
+    /* Chart series, validated for lightness band, chroma and colour-vision separation. */
+    --chart-1: oklch(66% 0.115 182);
+    --chart-2: oklch(62% 0.16 292);
+    --chart-3: oklch(66% 0.13 72);
+    --chart-surface: var(--color-base-100);
     --chart-grid: color-mix(in oklab, var(--color-base-content) 8%, transparent);
     --chart-axis: color-mix(in oklab, var(--color-base-content) 55%, transparent);
   }
@@ -148,6 +150,9 @@
     --glow-primary: color-mix(in oklab, var(--color-primary) 14%, transparent);
     --glow-secondary: color-mix(in oklab, var(--color-secondary) 10%, transparent);
     --hairline: color-mix(in oklab, var(--color-base-content) 10%, transparent);
+    --chart-1: oklch(57% 0.11 178);
+    --chart-2: oklch(52% 0.19 292);
+    --chart-3: oklch(64% 0.15 62);
   }
 
   html {

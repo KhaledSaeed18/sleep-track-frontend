@@ -13,12 +13,12 @@ const SIZE = { sm: 'size-8 text-xs', md: 'size-10 text-sm', lg: 'size-16 text-xl
 
 export function Avatar({ firstName, lastName, src, size = 'md', className }: AvatarProps) {
   return (
-    <span className={cn('avatar', !src && 'avatar-placeholder', className)}>
-      <span
+    <div className={cn('avatar', !src && 'avatar-placeholder', className)}>
+      <div
         className={cn(
-          'rounded-full',
+          'flex items-center justify-center rounded-full',
           SIZE[size],
-          !src && 'bg-linear-to-br from-primary/30 to-secondary/30 font-semibold text-base-content',
+          !src && 'bg-linear-to-br from-primary/35 to-secondary/35 font-semibold text-base-content',
         )}
       >
         {src ? (
@@ -26,7 +26,7 @@ export function Avatar({ firstName, lastName, src, size = 'md', className }: Ava
         ) : (
           <span aria-hidden="true">{initials(firstName, lastName)}</span>
         )}
-      </span>
-    </span>
+      </div>
+    </div>
   );
 }

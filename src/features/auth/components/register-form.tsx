@@ -12,7 +12,7 @@ import { applyServerErrors } from '@/lib/forms';
 import { useRegister } from '../hooks/use-auth';
 import { registerSchema, type RegisterValues } from '../schemas';
 import { AuthCard } from './auth-card';
-import { FormAlert } from './form-alert';
+import { FormAlert } from '@/components/ui/form-alert';
 import { OAuthButtons } from './oauth-buttons';
 import { PasswordStrengthMeter } from './password-strength-meter';
 

@@ -12,7 +12,7 @@ import { useLogin } from '../hooks/use-auth';
 import { loginSchema, type LoginValues } from '../schemas';
 import { AuthCard } from './auth-card';
 import { DemoButton } from './demo-button';
-import { FormAlert } from './form-alert';
+import { FormAlert } from '@/components/ui/form-alert';
 import { OAuthButtons } from './oauth-buttons';
 
 const NOTICES: Record<string, { tone: 'info' | 'success' | 'error'; message: string }> = {

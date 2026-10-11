@@ -11,7 +11,7 @@ import { applyServerErrors } from '@/lib/forms';
 import { authApi } from '../api';
 import { resetPasswordSchema, type ResetPasswordValues } from '../schemas';
 import { AuthCard } from './auth-card';
-import { FormAlert } from './form-alert';
+import { FormAlert } from '@/components/ui/form-alert';
 import { PasswordStrengthMeter } from './password-strength-meter';
 
 export function ResetPasswordForm() {
