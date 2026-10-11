@@ -13,6 +13,17 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   reactCompiler: true,
   poweredByHeader: false,
+  agentRules: false,
+  turbopack: {
+    resolveAlias: {
+      // `msw/browser` is unavailable under the `node` condition, so the SSR pass of client
+      // components gets a stub. Only used when NEXT_PUBLIC_API_MOCKING is enabled.
+      'msw/browser': {
+        browser: './node_modules/msw/lib/browser/index.js',
+        default: './src/mocks/worker-stub.ts',
+      },
+    },
+  },
   typedRoutes: false,
   images: {
     remotePatterns: [
