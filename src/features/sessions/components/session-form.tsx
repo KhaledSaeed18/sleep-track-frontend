@@ -53,7 +53,7 @@ function NightPreview({
         endLabel={endClock ? `Up ${formatClock(endClock, timeFormat)}` : ''}
         className="mx-auto max-w-xs"
       >
-        <span className="tabular font-display text-3xl font-semibold" aria-live="polite">
+        <span className="text-3xl font-semibold tracking-tight" aria-live="polite">
           {valid ? formatDuration(minutes) : '—'}
         </span>
         <span className="text-xs text-base-content/60">time asleep</span>

@@ -13,7 +13,11 @@ export function TagChip({ tag, size = 'sm', className }: TagChipProps) {
   const sizeClass = { xs: 'badge-xs', sm: 'badge-sm', md: 'badge-md' }[size];
   return (
     <span
-      className={cn('badge gap-1 border font-medium whitespace-nowrap', sizeClass, className)}
+      className={cn(
+        'badge gap-1 rounded-full border font-medium whitespace-nowrap',
+        sizeClass,
+        className,
+      )}
       style={
         {
           backgroundColor: `color-mix(in oklab, ${tag.color} 16%, transparent)`,
