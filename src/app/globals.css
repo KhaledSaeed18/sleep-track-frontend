@@ -1,0 +1,266 @@
+@import 'tailwindcss';
+
+@plugin 'daisyui' {
+  themes: false;
+  logs: false;
+}
+
+/* Midnight: the default, a deep indigo night with aurora and moonlight accents. */
+@plugin 'daisyui/theme' {
+  name: 'midnight';
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+  --color-base-100: oklch(21.5% 0.048 272);
+  --color-base-200: oklch(17.5% 0.042 273);
+  --color-base-300: oklch(27% 0.05 272);
+  --color-base-content: oklch(92.5% 0.018 272);
+  --color-primary: oklch(83% 0.105 182);
+  --color-primary-content: oklch(21% 0.045 200);
+  --color-secondary: oklch(74% 0.135 292);
+  --color-secondary-content: oklch(19% 0.06 292);
+  --color-accent: oklch(86% 0.105 82);
+  --color-accent-content: oklch(24% 0.05 70);
+  --color-neutral: oklch(30% 0.05 272);
+  --color-neutral-content: oklch(92% 0.018 272);
+  --color-info: oklch(76% 0.11 240);
+  --color-info-content: oklch(20% 0.05 245);
+  --color-success: oklch(79% 0.13 158);
+  --color-success-content: oklch(21% 0.05 160);
+  --color-warning: oklch(83% 0.13 76);
+  --color-warning-content: oklch(23% 0.05 70);
+  --color-error: oklch(71% 0.16 18);
+  --color-error-content: oklch(18% 0.05 18);
+  --radius-selector: 1rem;
+  --radius-field: 0.75rem;
+  --radius-box: 1.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+/* Dawn: the light counterpart, cool and airy rather than warm paper. */
+@plugin 'daisyui/theme' {
+  name: 'dawn';
+  default: false;
+  prefersdark: false;
+  color-scheme: light;
+  --color-base-100: oklch(99.4% 0.004 272);
+  --color-base-200: oklch(96.6% 0.011 274);
+  --color-base-300: oklch(91.5% 0.02 274);
+  --color-base-content: oklch(26% 0.055 272);
+  --color-primary: oklch(52% 0.095 186);
+  --color-primary-content: oklch(99% 0.01 186);
+  --color-secondary: oklch(51% 0.19 292);
+  --color-secondary-content: oklch(98.5% 0.01 292);
+  --color-accent: oklch(70% 0.14 68);
+  --color-accent-content: oklch(23% 0.05 60);
+  --color-neutral: oklch(27% 0.055 272);
+  --color-neutral-content: oklch(96% 0.01 272);
+  --color-info: oklch(55% 0.14 245);
+  --color-info-content: oklch(98% 0.01 245);
+  --color-success: oklch(55% 0.12 158);
+  --color-success-content: oklch(98% 0.01 158);
+  --color-warning: oklch(70% 0.15 70);
+  --color-warning-content: oklch(23% 0.05 60);
+  --color-error: oklch(56% 0.19 22);
+  --color-error-content: oklch(98% 0.01 22);
+  --radius-selector: 1rem;
+  --radius-field: 0.75rem;
+  --radius-box: 1.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+@custom-variant dark (&:where([data-theme='midnight'], [data-theme='midnight'] *));
+
+@theme {
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --text-display: clamp(2.6rem, 1.6rem + 4.2vw, 4.75rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.025em;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-twinkle: twinkle 6s ease-in-out infinite;
+  --animate-drift: drift 40s linear infinite;
+  --animate-breathe: breathe 4.5s ease-in-out infinite;
+
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 0.35;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
+
+  @keyframes drift {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-120px, 40px, 0);
+    }
+  }
+
+  @keyframes breathe {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.85;
+    }
+    50% {
+      transform: scale(1.06);
+      opacity: 1;
+    }
+  }
+}
+
+@layer base {
+  :root {
+    --sky-top: oklch(15% 0.05 275);
+    --sky-mid: oklch(20% 0.06 280);
+    --sky-horizon: oklch(32% 0.08 300);
+    --glow-primary: color-mix(in oklab, var(--color-primary) 22%, transparent);
+    --glow-secondary: color-mix(in oklab, var(--color-secondary) 20%, transparent);
+    --hairline: color-mix(in oklab, var(--color-base-content) 9%, transparent);
+    --chart-1: var(--color-primary);
+    --chart-2: var(--color-secondary);
+    --chart-3: var(--color-accent);
+    --chart-grid: color-mix(in oklab, var(--color-base-content) 8%, transparent);
+    --chart-axis: color-mix(in oklab, var(--color-base-content) 55%, transparent);
+  }
+
+  [data-theme='dawn'] {
+    --sky-top: oklch(93% 0.03 260);
+    --sky-mid: oklch(95% 0.03 300);
+    --sky-horizon: oklch(93% 0.06 60);
+    --glow-primary: color-mix(in oklab, var(--color-primary) 14%, transparent);
+    --glow-secondary: color-mix(in oklab, var(--color-secondary) 10%, transparent);
+    --hairline: color-mix(in oklab, var(--color-base-content) 10%, transparent);
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    @apply bg-base-200 font-sans text-base-content;
+    font-feature-settings: 'ss01';
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-primary) 35%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .font-display {
+    font-variation-settings:
+      'SOFT' 100,
+      'WONK' 0;
+  }
+
+  .surface {
+    @apply rounded-box border border-(--hairline) bg-base-100;
+  }
+
+  .surface-glass {
+    @apply rounded-box border border-(--hairline);
+    background: color-mix(in oklab, var(--color-base-100) 72%, transparent);
+    backdrop-filter: blur(14px) saturate(1.2);
+  }
+
+  .hairline {
+    border-color: var(--hairline);
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .sky-gradient {
+    background:
+      radial-gradient(120% 80% at 50% 115%, var(--sky-horizon), transparent 60%),
+      linear-gradient(180deg, var(--sky-top), var(--sky-mid));
+  }
+
+  .glow-ring {
+    box-shadow:
+      0 0 0 1px var(--hairline),
+      0 20px 60px -24px var(--glow-primary),
+      0 8px 24px -16px var(--glow-secondary);
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-sm font-medium text-base-content/80;
+  }
+
+  .field-hint {
+    @apply mt-1.5 text-xs text-base-content/60;
+  }
+
+  .field-error {
+    @apply mt-1.5 text-xs font-medium text-error;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--color-base-content) 20%, transparent) transparent;
+  }
+
+  .mask-fade-b {
+    mask-image: linear-gradient(to bottom, black 70%, transparent);
+  }
+}
+
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
