@@ -1,6 +1,6 @@
 # SleepTrack Web
 
-[![CI](https://github.com/KhaledSaeed18/sleep-track-frontend/actions/workflows/ci.yml/badge.svg?branch=v2)](https://github.com/KhaledSaeed18/sleep-track-frontend/actions/workflows/ci.yml)
+[![CI](https://github.com/KhaledSaeed18/sleep-track-frontend/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/KhaledSaeed18/sleep-track-frontend/actions/workflows/ci.yml)
 ![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
@@ -126,13 +126,13 @@ Run `pnpm screenshots` to regenerate them.
 ```bash
 # 1. Start the API, database, Redis and Mailpit, then load the demo accounts
 git clone https://github.com/KhaledSaeed18/sleep-track-backend.git
-cd sleep-track-backend && git checkout v2
+cd sleep-track-backend
 docker compose up -d --wait && make seed
 cd ..
 
 # 2. Start the web app
 git clone https://github.com/KhaledSaeed18/sleep-track-frontend.git
-cd sleep-track-frontend && git checkout v2
+cd sleep-track-frontend
 pnpm install
 cp .env.example .env.local
 pnpm dev
