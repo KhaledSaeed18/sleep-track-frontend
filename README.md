@@ -147,14 +147,15 @@ in-browser mock API (MSW) with seeded nights, so every page works offline.
 
 ## Configuration
 
-| Variable                  | Default                 | Purpose                                                                           |
-| ------------------------- | ----------------------- | --------------------------------------------------------------------------------- |
-| `API_INTERNAL_URL`        | `http://localhost:8000` | Where the Next.js server forwards `/api/*`. Server-side only, read at build time. |
-| `NEXT_PUBLIC_APP_URL`     | `http://localhost:3000` | Public origin, used for metadata, sitemap and OAuth redirects.                    |
-| `NEXT_PUBLIC_API_MOCKING` | `false`                 | `true` runs the app against the in-browser mock API.                              |
+| Variable                  | Default                 | Purpose                                                                        |
+| ------------------------- | ----------------------- | ------------------------------------------------------------------------------ |
+| `API_INTERNAL_URL`        | `http://localhost:8000` | Where the Next.js server forwards `/api/*`. Server-side only, read at runtime. |
+| `NEXT_PUBLIC_APP_URL`     | `http://localhost:3000` | Public origin, used for metadata, sitemap and OAuth redirects.                 |
+| `NEXT_PUBLIC_API_MOCKING` | `false`                 | `true` runs the app against the in-browser mock API.                           |
 
-The browser only ever talks to the app's own origin. Requests to `/api/*` are rewritten to the API,
-so the refresh-token cookie is first-party and no CORS setup is needed.
+The browser only ever talks to the app's own origin. A route handler streams `/api/*` to the API
+and adds the client's address as `X-Forwarded-For`, so the refresh-token cookie is first-party, no
+CORS setup is needed, and the API's per-IP rate limits and security log see real clients.
 
 ## Scripts
 
@@ -196,21 +197,22 @@ Docker Compose stack, checked out from the matching branch.
 ## Docker and deployment
 
 The `Dockerfile` builds a small, non-root image from Next.js standalone output, with a health check.
-Because rewrites are resolved at build time, the API address is a build argument.
+The API address is read at runtime, so one image runs in every environment; only the public app
+URL is baked into the client bundle.
 
 ```bash
 # Next to the backend's Compose stack (joins its network and proxies to the `api` service)
 docker compose up -d --build
 
 # Anywhere else
-docker build --build-arg API_INTERNAL_URL=https://api.example.com \
-             --build-arg NEXT_PUBLIC_APP_URL=https://sleeptrack.example.com \
-             -t sleeptrack-web .
-docker run -p 3000:3000 sleeptrack-web
+docker build --build-arg NEXT_PUBLIC_APP_URL=https://sleeptrack.example.com -t sleeptrack-web .
+docker run -p 3000:3000 -e API_INTERNAL_URL=http://api.internal:8000 sleeptrack-web
 ```
 
-The image runs on any container host. For production, serve the app and API behind HTTPS and set
-the API's `FRONTEND_URL` and cookie settings to match the public origin.
+The image runs on any container host. For production, serve the app behind HTTPS, keep the API on
+a private network, set the API's `FRONTEND_URL` and cookie settings to match the public origin, and
+set its `FORWARDED_ALLOW_IPS` to the web app's address so only this proxy can assert client IPs. If
+a load balancer sits in front of the app, have it set `X-Forwarded-For`; the app passes it on.
 
 ## Project structure
 
@@ -230,6 +232,7 @@ schemas and components, and shared building blocks live in `components/` and `li
 ├── scripts/screenshots.mjs     # README screenshots and page smoke test
 ├── src/
 │   ├── app/
+│   │   ├── api/[...path]/      # same-origin streaming proxy to the API
 │   │   ├── (marketing)/        # landing, privacy, terms
 │   │   ├── (auth)/             # login, register, forgot/reset password, verify email, OAuth callback
 │   │   ├── (app)/              # signed-in pages behind the app shell
@@ -262,7 +265,7 @@ schemas and components, and shared building blocks live in `components/` and `li
 │   ├── config/                 # navigation and site metadata
 │   └── proxy.ts                # optimistic route gating
 ├── Dockerfile  docker-compose.yml
-├── next.config.ts              # rewrites, security headers, redirects
+├── next.config.ts              # security headers, redirects, standalone output
 ├── playwright.config.ts  vitest.config.mts
 └── eslint.config.mjs  tsconfig.json
 ```

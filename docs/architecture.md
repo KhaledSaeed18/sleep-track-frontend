@@ -7,7 +7,7 @@ see the [README](../README.md).
 
 ```text
  Browser ──────────────► Next.js server (this app) ──────────────► SleepTrack API (FastAPI)
-   │  same origin only      │  /api/* rewritten to API_INTERNAL_URL     │  PostgreSQL, Redis, worker
+   │  same origin only      │  /api/* streamed to API_INTERNAL_URL      │  PostgreSQL, Redis, worker
    │                        │  proxy.ts: optimistic route gating        │
    │  React 19 client       │  static and server-rendered shells        │
    │  TanStack Query cache  │  security headers                         │
@@ -17,8 +17,22 @@ see the [README](../README.md).
 The app is a client-rendered product behind statically rendered shells. Marketing, legal and auth
 pages are server components with metadata. The signed-in area renders a server shell and hands off
 to client features, because all of its data is private, per user and interactive. Putting the API
-behind a same-origin rewrite keeps cookies first-party, avoids CORS entirely and lets the API live
+behind a same-origin proxy keeps cookies first-party, avoids CORS entirely and lets the API live
 on a private network.
+
+## The API gateway
+
+`app/api/[...path]/route.ts` hands every `/api/*` request to `proxyToApi()` in
+`lib/api/upstream-proxy.ts`, which streams it to `API_INTERNAL_URL` and the response back. It
+drops hop-by-hop headers, keeps each `Set-Cookie` separate, passes redirects through untouched (the
+OAuth flow relies on them), times out after 30 seconds and answers `502` with a problem document
+when the API is down.
+
+A route handler is used instead of a `rewrites()` entry for two reasons. Next.js does not add
+`X-Forwarded-For` to rewritten requests, so the API would see every user as the web server: one
+shared bucket for per-IP rate limits and the wrong address in the device list and security log. And
+rewrites are fixed at build time, while the handler reads the API address per request, so the same
+Docker image runs in every environment.
 
 ## Code organisation
 
