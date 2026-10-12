@@ -12,9 +12,10 @@ services:
     build:
       context: .
       args:
-        API_INTERNAL_URL: ${API_INTERNAL_URL:-http://api:8000}
         NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
     image: sleeptrack-web:local
+    environment:
+      API_INTERNAL_URL: ${API_INTERNAL_URL:-http://api:8000}
     ports:
       - '${WEB_PORT:-3000}:3000'
     restart: unless-stopped

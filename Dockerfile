@@ -15,12 +15,10 @@ FROM node:${NODE_VERSION}-alpine AS builder
 RUN corepack enable
 WORKDIR /app
 
-# Rewrites and public env are resolved at build time, so they are build arguments.
-ARG API_INTERNAL_URL=http://api:8000
+# NEXT_PUBLIC_* values are inlined into the client bundle, so they are build arguments.
 ARG NEXT_PUBLIC_APP_URL=http://localhost:3000
 ARG NEXT_PUBLIC_API_MOCKING=false
-ENV API_INTERNAL_URL=${API_INTERNAL_URL} \
-    NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL} \
+ENV NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL} \
     NEXT_PUBLIC_API_MOCKING=${NEXT_PUBLIC_API_MOCKING} \
     NEXT_TELEMETRY_DISABLED=1
 
@@ -31,8 +29,10 @@ RUN pnpm build
 # ---------------------------------------------------------------------------- runtime
 FROM node:${NODE_VERSION}-alpine AS runtime
 WORKDIR /app
+# The API address is read per request, so it can change without rebuilding the image.
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
+    API_INTERNAL_URL=http://api:8000 \
     HOSTNAME=0.0.0.0 \
     PORT=3000
 
