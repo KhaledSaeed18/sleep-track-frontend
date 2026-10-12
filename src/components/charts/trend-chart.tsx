@@ -47,6 +47,7 @@ export default function TrendChart({
   domain = [0, 'auto'],
   height = 240,
   ticks,
+  series = 0,
 }: TrendChartProps) {
   const count = data.length;
   const interval = count <= 10 ? 0 : 'preserveStartEnd';

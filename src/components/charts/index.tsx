@@ -18,8 +18,6 @@ export const CategoryBarChart = dynamic(() => import('./category-bar-chart'), {
   loading,
 });
 export const ImpactChart = dynamic(() => import('./impact-chart'), { ssr: false, loading });
-export const SimpleAreaChart = dynamic(() => import('./area-chart'), { ssr: false, loading });
-export const Sparkline = dynamic(() => import('./sparkline'), { ssr: false, loading: () => null });
 
 export { ChartSkeleton };
 export type { TrendPoint } from './trend-chart';
