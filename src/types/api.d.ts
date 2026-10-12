@@ -1240,7 +1240,15 @@ export interface components {
             bedtime_window_minutes: number;
             recommended: components["schemas"]["RecommendedRange"];
         };
-        /** GoalUpdate */
+        /**
+         * GoalUpdate
+         * @example {
+         *       "bedtime_window_minutes": 30,
+         *       "target_bedtime": "23:00",
+         *       "target_duration_minutes": 480,
+         *       "target_wake_time": "07:00"
+         *     }
+         */
         GoalUpdate: {
             /**
              * Target Duration Minutes
@@ -1460,7 +1468,13 @@ export interface components {
             /** Email Bedtime Reminder */
             email_bedtime_reminder: boolean;
         };
-        /** PreferencesUpdate */
+        /**
+         * PreferencesUpdate
+         * @example {
+         *       "theme": "dark",
+         *       "timezone": "Asia/Beirut"
+         *     }
+         */
         PreferencesUpdate: {
             /** Timezone */
             timezone?: string | null;
@@ -1750,7 +1764,14 @@ export interface components {
          * @enum {string}
          */
         SleepStatus: "in_progress" | "completed";
-        /** TagCreate */
+        /**
+         * TagCreate
+         * @example {
+         *       "color": "#ef4444",
+         *       "icon": "thermometer",
+         *       "name": "Hot room"
+         *     }
+         */
         TagCreate: {
             /** Name */
             name: string;
@@ -1851,7 +1872,15 @@ export interface components {
             active: boolean;
             session: components["schemas"]["SleepSessionRead"] | null;
         };
-        /** TimerStop */
+        /**
+         * TimerStop
+         * @example {
+         *       "awakenings": 1,
+         *       "mood_on_wake": 4,
+         *       "quality": 4,
+         *       "tag_ids": []
+         *     }
+         */
         TimerStop: {
             /** Quality */
             quality?: number | null;
@@ -1927,7 +1956,14 @@ export interface components {
          * @enum {string}
          */
         UserRole: "user" | "admin";
-        /** UserUpdate */
+        /**
+         * UserUpdate
+         * @example {
+         *       "date_of_birth": "1999-05-01",
+         *       "first_name": "Khaled",
+         *       "last_name": "Saeed"
+         *     }
+         */
         UserUpdate: {
             /** First Name */
             first_name?: string | null;
@@ -2698,6 +2734,15 @@ export interface operations {
                     "application/problem+json": components["schemas"]["ProblemDetail"];
                 };
             };
+            /** @description Rate limited */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
         };
     };
     users_update_me: {
@@ -2824,6 +2869,15 @@ export interface operations {
             };
             /** @description Validation error */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetail"];
+                };
+            };
+            /** @description Rate limited */
+            429: {
                 headers: {
                     [name: string]: unknown;
                 };
