@@ -48,74 +48,79 @@ export function NightArc({
   const moon = progress === null || progress === undefined ? null : pointAt(progress);
 
   return (
-    <div className={cn('relative w-full', className)}>
-      <svg
-        viewBox={`0 0 ${W} ${H}`}
-        className="w-full overflow-visible"
-        role={title ? 'img' : undefined}
-        aria-label={title}
-        aria-hidden={title ? undefined : true}
-      >
-        <defs>
-          <linearGradient id={`arc-${id}`} x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0" stopColor="var(--color-secondary)" />
-            <stop offset="0.55" stopColor="var(--color-primary)" />
-            <stop offset="1" stopColor="var(--color-accent)" />
-          </linearGradient>
-          <radialGradient id={`moon-${id}`}>
-            <stop offset="0" stopColor="var(--color-accent)" stopOpacity="0.55" />
-            <stop offset="1" stopColor="var(--color-accent)" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-        <line
-          x1={CX - R - 12}
-          x2={CX + R + 12}
-          y1={CY}
-          y2={CY}
-          stroke="var(--hairline)"
-          strokeWidth="1"
-        />
-        <path
-          d={ARC_PATH}
-          fill="none"
-          stroke="var(--hairline)"
-          strokeWidth="6"
-          strokeLinecap="round"
-        />
-        <path
-          d={ARC_PATH}
-          fill="none"
-          stroke={`url(#arc-${id})`}
-          strokeWidth="6"
-          strokeLinecap="round"
-          strokeDasharray={ARC_LENGTH}
-          strokeDashoffset={ARC_LENGTH * (1 - Math.min(1, Math.max(0, filled)))}
-          className="transition-[stroke-dashoffset] duration-700 ease-(--ease-out-soft)"
-        />
-        {moon && (
-          <g
-            className={live ? 'origin-center animate-breathe [transform-box:fill-box]' : undefined}
-          >
-            <circle cx={moon.x} cy={moon.y} r="16" fill={`url(#moon-${id})`} />
-            <mask id={`crescent-${id}`}>
-              <circle cx={moon.x} cy={moon.y} r="7" fill="white" />
-              <circle cx={moon.x + 3} cy={moon.y - 2.4} r="5.6" fill="black" />
-            </mask>
-            <circle
-              cx={moon.x}
-              cy={moon.y}
-              r="7"
-              fill="var(--color-accent)"
-              mask={`url(#crescent-${id})`}
-            />
-          </g>
+    <div className={cn('w-full', className)}>
+      <div className="relative">
+        <svg
+          viewBox={`0 0 ${W} ${H}`}
+          className="w-full overflow-visible"
+          role={title ? 'img' : undefined}
+          aria-label={title}
+          aria-hidden={title ? undefined : true}
+        >
+          <defs>
+            <linearGradient id={`arc-${id}`} x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0" stopColor="var(--color-secondary)" />
+              <stop offset="0.55" stopColor="var(--color-primary)" />
+              <stop offset="1" stopColor="var(--color-accent)" />
+            </linearGradient>
+            <radialGradient id={`moon-${id}`}>
+              <stop offset="0" stopColor="var(--color-accent)" stopOpacity="0.55" />
+              <stop offset="1" stopColor="var(--color-accent)" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+          <line
+            x1={CX - R - 12}
+            x2={CX + R + 12}
+            y1={CY}
+            y2={CY}
+            stroke="var(--hairline)"
+            strokeWidth="1"
+          />
+          <path
+            d={ARC_PATH}
+            fill="none"
+            stroke="var(--hairline)"
+            strokeWidth="6"
+            strokeLinecap="round"
+          />
+          <path
+            d={ARC_PATH}
+            fill="none"
+            stroke={`url(#arc-${id})`}
+            strokeWidth="6"
+            strokeLinecap="round"
+            strokeDasharray={ARC_LENGTH}
+            strokeDashoffset={ARC_LENGTH * (1 - Math.min(1, Math.max(0, filled)))}
+            className="transition-[stroke-dashoffset] duration-700 ease-(--ease-out-soft)"
+          />
+          {moon && (
+            <g
+              className={
+                live ? 'origin-center animate-breathe [transform-box:fill-box]' : undefined
+              }
+            >
+              <circle cx={moon.x} cy={moon.y} r="16" fill={`url(#moon-${id})`} />
+              <mask id={`crescent-${id}`}>
+                <circle cx={moon.x} cy={moon.y} r="7" fill="white" />
+                <circle cx={moon.x + 3} cy={moon.y - 2.4} r="5.6" fill="black" />
+              </mask>
+              <circle
+                cx={moon.x}
+                cy={moon.y}
+                r="7"
+                fill="var(--color-accent)"
+                mask={`url(#crescent-${id})`}
+              />
+            </g>
+          )}
+        </svg>
+        {children && (
+          // Anchored to the arc, not the wrapper, so it always sits above the horizon line.
+          <div className="absolute inset-x-0 bottom-[12%] flex flex-col items-center text-center">
+            {children}
+          </div>
         )}
-      </svg>
-      {children && (
-        <div className="absolute inset-x-0 bottom-1 flex flex-col items-center text-center">
-          {children}
-        </div>
-      )}
+      </div>
       {(startLabel !== undefined || endLabel !== undefined) && (
         <div className="tabular mt-1.5 flex justify-between px-[2%] text-xs text-base-content/65">
           <span>{startLabel}</span>
