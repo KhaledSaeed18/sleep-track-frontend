@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, MailCheck } from 'lucide-react';
 import Link from 'next/link';
+import { useMounted } from '@/hooks/use-mounted';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { TextField } from '@/components/ui/field';
@@ -17,6 +18,7 @@ export function ForgotPasswordForm() {
     mutationFn: (email: string) => authApi.forgotPassword(email),
     meta: { silent: true },
   });
+  const hydrated = useMounted();
   const {
     register,
     handleSubmit,
@@ -69,7 +71,7 @@ export function ForgotPasswordForm() {
           {errors.root.server.message}
         </FormAlert>
       )}
-      <form onSubmit={onSubmit} noValidate className="space-y-4">
+      <form method="post" onSubmit={onSubmit} noValidate className="space-y-4">
         <TextField
           label="Email"
           type="email"
@@ -78,7 +80,11 @@ export function ForgotPasswordForm() {
           error={errors.email?.message}
           {...register('email')}
         />
-        <button type="submit" className="btn w-full btn-primary" disabled={isSubmitting}>
+        <button
+          type="submit"
+          className="btn w-full btn-primary"
+          disabled={isSubmitting || !hydrated}
+        >
           {isSubmitting && (
             <span className="loading loading-sm loading-spinner" aria-hidden="true" />
           )}

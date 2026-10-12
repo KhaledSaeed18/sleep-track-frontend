@@ -83,7 +83,7 @@ export function RegisterForm() {
 
       <OAuthButtons />
 
-      <form onSubmit={onSubmit} noValidate className="space-y-4">
+      <form method="post" onSubmit={onSubmit} noValidate className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <TextField
             label="First name"
@@ -142,7 +142,11 @@ export function RegisterForm() {
           </label>
           {errors.accept_terms && <p className="field-error">{errors.accept_terms.message}</p>}
         </div>
-        <button type="submit" className="btn w-full btn-primary" disabled={busy || closed}>
+        <button
+          type="submit"
+          className="btn w-full btn-primary"
+          disabled={busy || closed || !mounted}
+        >
           {busy && <span className="loading loading-sm loading-spinner" aria-hidden="true" />}
           Create account
         </button>

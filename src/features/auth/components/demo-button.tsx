@@ -2,6 +2,7 @@
 
 import { Sparkles } from 'lucide-react';
 import { useAppMeta } from '@/features/meta/api';
+import { useMounted } from '@/hooks/use-mounted';
 import { cn } from '@/lib/utils';
 import { useDemoLogin } from '../hooks/use-auth';
 
@@ -16,6 +17,7 @@ export function DemoButton({
 }) {
   const { data: meta } = useAppMeta();
   const demo = useDemoLogin();
+  const hydrated = useMounted();
   if (meta && !meta.features.demo_mode) return null;
   const variantClass = {
     ghost: 'btn-ghost',
@@ -28,7 +30,7 @@ export function DemoButton({
       type="button"
       className={cn('btn gap-2', variantClass, className)}
       onClick={() => demo.mutate()}
-      disabled={demo.isPending || demo.isSuccess}
+      disabled={!hydrated || demo.isPending || demo.isSuccess}
     >
       {demo.isPending || demo.isSuccess ? (
         <span className="loading loading-sm loading-spinner" aria-hidden="true" />

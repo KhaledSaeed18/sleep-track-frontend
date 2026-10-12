@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useMounted } from '@/hooks/use-mounted';
 import { useForm } from 'react-hook-form';
 import { PasswordField, TextField } from '@/components/ui/field';
 import { isApiError } from '@/lib/api/errors';
@@ -39,6 +40,7 @@ export function LoginForm() {
   const next = params.get('next');
   const notice = useNotice(params);
   const login = useLogin(next);
+  const hydrated = useMounted();
   const {
     register,
     handleSubmit,
@@ -102,7 +104,7 @@ export function LoginForm() {
 
       <OAuthButtons next={next} />
 
-      <form onSubmit={onSubmit} noValidate className="space-y-4">
+      <form method="post" onSubmit={onSubmit} noValidate className="space-y-4">
         <TextField
           label="Email"
           type="email"
@@ -131,7 +133,7 @@ export function LoginForm() {
           />
           Keep me signed in for 30 days
         </label>
-        <button type="submit" className="btn w-full btn-primary" disabled={busy}>
+        <button type="submit" className="btn w-full btn-primary" disabled={busy || !hydrated}>
           {busy && <span className="loading loading-sm loading-spinner" aria-hidden="true" />}
           Sign in
         </button>

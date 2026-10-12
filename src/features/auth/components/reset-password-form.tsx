@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useMounted } from '@/hooks/use-mounted';
 import { useForm, useWatch } from 'react-hook-form';
 import { PasswordField } from '@/components/ui/field';
 import { isApiError } from '@/lib/api/errors';
@@ -21,6 +22,7 @@ export function ResetPasswordForm() {
     mutationFn: (password: string) => authApi.resetPassword(token ?? '', password),
     meta: { silent: true },
   });
+  const hydrated = useMounted();
   const {
     register,
     handleSubmit,
@@ -74,7 +76,7 @@ export function ResetPasswordForm() {
           </Link>
         </FormAlert>
       )}
-      <form onSubmit={onSubmit} noValidate className="space-y-4">
+      <form method="post" onSubmit={onSubmit} noValidate className="space-y-4">
         <div>
           <PasswordField
             label="New password"
@@ -93,7 +95,7 @@ export function ResetPasswordForm() {
         <button
           type="submit"
           className="btn w-full btn-primary"
-          disabled={isSubmitting || reset.isSuccess}
+          disabled={isSubmitting || reset.isSuccess || !hydrated}
         >
           {(isSubmitting || reset.isSuccess) && (
             <span className="loading loading-sm loading-spinner" aria-hidden="true" />
