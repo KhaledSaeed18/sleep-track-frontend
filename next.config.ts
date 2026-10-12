@@ -1,7 +1,5 @@
 import type { NextConfig } from 'next';
 
-const apiInternalUrl = (process.env.API_INTERNAL_URL ?? 'http://localhost:8000').replace(/\/$/, '');
-
 const securityHeaders = [
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'X-Frame-Options', value: 'DENY' },
@@ -40,9 +38,6 @@ const nextConfig: NextConfig = {
         permanent: false,
       },
     ];
-  },
-  async rewrites() {
-    return [{ source: '/api/:path*', destination: `${apiInternalUrl}/api/:path*` }];
   },
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
