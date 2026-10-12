@@ -1,0 +1,24 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      react:
+        patterns: ['react', 'react-dom', '@types/react', '@types/react-dom']
+      next:
+        patterns: ['next', 'eslint-config-next']
+      testing:
+        patterns: ['vitest', '@vitest/*', '@testing-library/*', '@playwright/test', 'msw', 'jsdom']
+      lint:
+        patterns: ['eslint', '@eslint/*', 'typescript-eslint', 'prettier', 'prettier-plugin-*']
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: monthly
