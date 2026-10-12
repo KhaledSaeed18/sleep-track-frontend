@@ -20,7 +20,11 @@ export const accountApi = {
     unwrap(api.POST('/api/v1/users/me/change-password', { body })),
   devices: (signal?: AbortSignal) => unwrap(api.GET('/api/v1/users/me/sessions', { signal })),
   revokeDevice: (id: string) =>
-    unwrap(api.DELETE('/api/v1/users/me/sessions/{id}', { params: { path: { id } } })),
+    unwrap(
+      api.DELETE('/api/v1/users/me/sessions/{session_id}', {
+        params: { path: { session_id: id } },
+      }),
+    ),
   auditLog: (page: number, signal?: AbortSignal) =>
     unwrap(
       api.GET('/api/v1/users/me/audit-log', { params: { query: { page, page_size: 15 } }, signal }),

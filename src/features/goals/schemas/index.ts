@@ -6,8 +6,8 @@ export const goalSchema = z.object({
   target_duration_minutes: z
     .number()
     .int()
-    .min(240, 'Aim for at least 4 hours')
-    .max(720, 'Aim for at most 12 hours'),
+    .min(180, 'Aim for at least 3 hours')
+    .max(900, 'Aim for at most 15 hours'),
   target_bedtime: clock,
   target_wake_time: clock,
   bedtime_window_minutes: z.number().int().min(0).max(180),

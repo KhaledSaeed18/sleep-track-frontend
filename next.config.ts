@@ -31,6 +31,16 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
     ],
   },
+  async redirects() {
+    // Transactional emails link to /auth/<page>; the pages live at the top level.
+    return [
+      {
+        source: '/auth/:page(verify-email|reset-password|forgot-password|login|register)',
+        destination: '/:page',
+        permanent: false,
+      },
+    ];
+  },
   async rewrites() {
     return [{ source: '/api/:path*', destination: `${apiInternalUrl}/api/:path*` }];
   },

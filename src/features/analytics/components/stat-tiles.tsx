@@ -80,7 +80,7 @@ export function overviewTiles(overview: Overview | undefined, periodLabel: strin
     {
       label: 'Sleep debt',
       value: formatDuration(overview?.sleep_debt_minutes ?? null),
-      hint: 'below goal, weekly average',
+      hint: `short of your goal, last ${String(Math.min(14, overview?.range.days ?? 14))} nights`,
     },
   ];
 }

@@ -13,6 +13,7 @@ export interface SessionFilters {
   tag_ids?: string;
   q?: string;
   sort?: string;
+  status?: 'in_progress' | 'completed';
   page?: number;
   page_size?: number;
 }

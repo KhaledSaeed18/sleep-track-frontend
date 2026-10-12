@@ -153,7 +153,7 @@ export function toApiError(body: unknown, response: Response): ApiError {
     ).map((item) => ({
       field: (item.loc ?? []).map(String).join('.'),
       message: item.msg ?? 'Invalid value',
-      code: item.type,
+      code: item.type ?? 'value_error',
     }));
     return new ApiError(
       {

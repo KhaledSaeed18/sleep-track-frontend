@@ -6,6 +6,7 @@ import { accountApi } from '@/features/account/api';
 import { queryKeys } from '@/lib/query-keys';
 import { isSafeRedirect } from '@/lib/utils';
 import { DEFAULT_AUTHED_ROUTE } from '@/lib/auth/constants';
+import { browserTimezone } from '@/lib/date';
 import type { User } from '@/types/models';
 import { authApi, type LoginInput, type RegisterInput } from '../api';
 import { useAuthStore } from '../lib/auth-store';
@@ -70,7 +71,7 @@ export function useDemoLogin() {
   const queryClient = useQueryClient();
   const redirect = useAfterAuth();
   return useMutation({
-    mutationFn: () => authApi.demo(),
+    mutationFn: () => authApi.demo(browserTimezone()),
     onSuccess: (auth) => {
       establishSession(queryClient, auth);
       redirect('/dashboard');

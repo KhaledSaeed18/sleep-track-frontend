@@ -14,5 +14,5 @@ export const adminApi = {
   users: (query: AdminUserQuery, signal?: AbortSignal) =>
     unwrap(api.GET('/api/v1/admin/users', { params: { query }, signal })),
   updateUser: (id: string, body: { is_active?: boolean; role?: Role }) =>
-    unwrap(api.PATCH('/api/v1/admin/users/{id}', { params: { path: { id } }, body })),
+    unwrap(api.PATCH('/api/v1/admin/users/{user_id}', { params: { path: { user_id: id } }, body })),
 };

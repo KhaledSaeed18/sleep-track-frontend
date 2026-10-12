@@ -14,9 +14,18 @@ import { FormAlert } from '@/components/ui/form-alert';
 const ERRORS: Record<string, string> = {
   access_denied: 'You cancelled the Google sign-in.',
   provider_disabled: 'Google sign-in is not available right now.',
-  email_taken:
-    'An account with this email already exists. Sign in with your password, then link Google from settings.',
+  provider_unavailable: 'Google did not respond. Try again in a moment.',
+  state_mismatch: 'The sign-in request expired or was opened in another tab. Start again.',
+  state_expired: 'The sign-in request expired. Start again.',
+  invalid_request: 'The sign-in request was invalid. Start again.',
+  exchange_failed: 'Google sign-in could not be completed. Try again.',
+  userinfo_failed: 'We could not read your Google profile. Try again.',
+  email_unverified:
+    'Your Google email address is not verified. Verify it with Google, then try again.',
+  registration_closed: 'New sign-ups are paused right now.',
+  email_taken: 'An account with this email already exists. Sign in with your password instead.',
   account_disabled: 'This account has been deactivated.',
+  email_not_verified: 'Confirm your email address first. Check your inbox for the link.',
 };
 
 /** Landing page after the API completes an OAuth flow and sets the session cookies. */

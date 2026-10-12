@@ -326,7 +326,7 @@ export function createDb(options: { nights?: number; signedIn?: boolean } = {}):
       event,
       ip_address: index % 2 ? '10.0.0.24' : '127.0.0.1',
       user_agent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
-      metadata: event === 'data_exported' ? { format: 'csv' } : null,
+      metadata: event === 'data_exported' ? { format: 'csv' } : {},
       created_at: new Date(now - index * 26 * 3_600_000).toISOString(),
     })),
   };

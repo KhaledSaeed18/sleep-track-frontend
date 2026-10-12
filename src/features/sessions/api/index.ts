@@ -17,12 +17,24 @@ export const sessionsApi = {
   list: (query: SessionFilters, signal?: AbortSignal) =>
     unwrap(api.GET('/api/v1/sleep/sessions', { params: { query }, signal })),
   get: (id: string, signal?: AbortSignal) =>
-    unwrap(api.GET('/api/v1/sleep/sessions/{id}', { params: { path: { id } }, signal })),
+    unwrap(
+      api.GET('/api/v1/sleep/sessions/{session_id}', {
+        params: { path: { session_id: id } },
+        signal,
+      }),
+    ),
   create: (body: SessionInput) => unwrap(api.POST('/api/v1/sleep/sessions', { body })),
   update: (id: string, body: Partial<SessionInput>) =>
-    unwrap(api.PATCH('/api/v1/sleep/sessions/{id}', { params: { path: { id } }, body })),
+    unwrap(
+      api.PATCH('/api/v1/sleep/sessions/{session_id}', {
+        params: { path: { session_id: id } },
+        body,
+      }),
+    ),
   remove: (id: string) =>
-    unwrap(api.DELETE('/api/v1/sleep/sessions/{id}', { params: { path: { id } } })),
+    unwrap(
+      api.DELETE('/api/v1/sleep/sessions/{session_id}', { params: { path: { session_id: id } } }),
+    ),
   bulkRemove: (ids: string[]) =>
     unwrap(api.POST('/api/v1/sleep/sessions/bulk-delete', { body: { ids } })),
 };

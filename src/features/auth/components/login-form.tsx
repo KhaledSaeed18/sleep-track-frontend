@@ -53,6 +53,13 @@ export function LoginForm() {
     try {
       await login.mutateAsync(values);
     } catch (error) {
+      if (isApiError(error) && error.code === 'email_not_verified') {
+        setError('root.server', {
+          message:
+            'Confirm your email address before signing in. Check your inbox for the link we sent.',
+        });
+        return;
+      }
       if (isApiError(error) && error.code === 'invalid_credentials') {
         setError('root.server', {
           message: 'That email and password do not match. Check them and try again.',

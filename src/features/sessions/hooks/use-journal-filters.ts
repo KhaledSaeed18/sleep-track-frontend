@@ -52,6 +52,7 @@ export function useJournalFilters() {
       page: state.page,
       page_size: PAGE_SIZES.includes(state.size as (typeof PAGE_SIZES)[number]) ? state.size : 20,
       sort: state.sort,
+      status: 'completed',
     };
     if (state.q.trim()) filters.q = state.q.trim();
     if (state.from) filters.from = state.from;

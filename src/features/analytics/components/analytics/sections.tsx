@@ -221,13 +221,11 @@ export function TagImpactSection({ range, className }: { range: DateRange; class
   const rows = (impact.data ?? []).filter(
     (item) => item.quality_impact !== null && item.nights_with >= 2,
   );
-  const data = rows
-    .slice(0, 10)
-    .map((item) => ({
-      label: item.tag.name,
-      value: item.quality_impact ?? 0,
-      detail: `${String(item.nights_with)} with the tag`,
-    }));
+  const data = rows.slice(0, 10).map((item) => ({
+    label: item.tag.name,
+    value: item.quality_impact ?? 0,
+    detail: `${String(item.nights_with)} with the tag`,
+  }));
 
   if (impact.isPending)
     return (

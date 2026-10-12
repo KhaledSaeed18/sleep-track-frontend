@@ -34,7 +34,7 @@ export function useSession(id: string | null | undefined) {
 }
 
 export function useRecentSessions(pageSize = 5) {
-  return useSessions({ page: 1, page_size: pageSize, sort: '-started_at' });
+  return useSessions({ page: 1, page_size: pageSize, sort: '-started_at', status: 'completed' });
 }
 
 type ListSnapshot = [readonly unknown[], Page<SleepSession> | undefined][];

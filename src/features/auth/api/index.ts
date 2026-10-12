@@ -17,7 +17,8 @@ export interface RegisterInput {
 export const authApi = {
   login: (body: LoginInput) => unwrap(api.POST('/api/v1/auth/login', { body })),
   register: (body: RegisterInput) => unwrap(api.POST('/api/v1/auth/register', { body })),
-  demo: () => unwrap(api.POST('/api/v1/auth/demo')),
+  demo: (timezone?: string) =>
+    unwrap(api.POST('/api/v1/auth/demo', { body: timezone ? { timezone } : {} })),
   logout: () => unwrap(api.POST('/api/v1/auth/logout')),
   logoutAll: () => unwrap(api.POST('/api/v1/auth/logout-all')),
   verifyEmail: (token: string) =>

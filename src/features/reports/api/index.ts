@@ -11,7 +11,6 @@ export const reportsApi = {
   email: (weekStart?: string) =>
     unwrap(
       api.POST('/api/v1/reports/weekly/email', {
-        params: { query: weekStart ? { week_start: weekStart } : {} },
         body: weekStart ? { week_start: weekStart } : {},
       }),
     ),
