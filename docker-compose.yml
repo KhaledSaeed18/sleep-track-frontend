@@ -1,0 +1,27 @@
+# Runs the production build of the web app next to the backend stack.
+#
+#   1. Start the backend:   (cd ../sleep-track-backend && docker compose up -d)
+#   2. Start the web app:   docker compose up -d --build
+#
+# The app joins the backend's network and proxies /api/* to the `api` service, so the browser
+# only ever talks to http://localhost:3000.
+name: sleeptrack-web
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+    image: sleeptrack-web:local
+    environment:
+      API_INTERNAL_URL: ${API_INTERNAL_URL:-http://api:8000}
+    ports:
+      - '${WEB_PORT:-3000}:3000'
+    restart: unless-stopped
+    networks: [backend]
+
+networks:
+  backend:
+    name: ${BACKEND_NETWORK:-sleeptrack_default}
+    external: true

@@ -1,0 +1,8 @@
+.next
+node_modules
+coverage
+playwright-report
+test-results
+pnpm-lock.yaml
+public/mockServiceWorker.js
+src/types/api.d.ts
