@@ -124,7 +124,7 @@ function isProblemLike(value: unknown): value is Partial<ProblemDetails> {
   return (
     typeof value === 'object' &&
     value !== null &&
-    ('title' in value || 'code' in value || 'detail' in value)
+    ('title' in value || 'code' in value || ('detail' in value && typeof value.detail === 'string'))
   );
 }
 

@@ -103,7 +103,7 @@ export function fromDateTimeInput(value: string, zone: string): string {
   const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(value);
   if (!match) throw new RangeError(`Invalid datetime-local value: ${value}`);
   const [, y, mo, d, h, mi] = match.map(Number) as [number, number, number, number, number, number];
-  return new TZDate(y, mo - 1, d, h, mi, 0, zone).toISOString();
+  return new Date(new TZDate(y, mo - 1, d, h, mi, 0, zone).getTime()).toISOString();
 }
 
 export function minutesBetween(startIso: string, endIso: string): number {
