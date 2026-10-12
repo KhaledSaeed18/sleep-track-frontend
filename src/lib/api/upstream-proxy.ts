@@ -76,6 +76,9 @@ export async function proxyToApi(request: Request): Promise<Response> {
       body: hasBody ? request.body : undefined,
       redirect: 'manual',
       cache: 'no-store',
+      // Cookies are forwarded explicitly. With credentials enabled, Node's fetch applies the
+      // browser's 401 re-authentication step and fails any 401 to a streamed body.
+      credentials: 'omit',
       signal: AbortSignal.any([request.signal, AbortSignal.timeout(UPSTREAM_TIMEOUT_MS)]),
       // Required by Node's fetch to stream a request body.
       ...(hasBody ? { duplex: 'half' } : {}),

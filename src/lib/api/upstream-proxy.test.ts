@@ -1,5 +1,9 @@
 // @vitest-environment node
+import { createServer } from 'node:http';
+import type { AddressInfo } from 'node:net';
+import { http, passthrough } from 'msw';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { server } from '@/mocks/node';
 import { proxyToApi } from './upstream-proxy';
 
 const fetchMock = vi.fn<typeof fetch>();
@@ -107,5 +111,42 @@ describe('proxyToApi', () => {
     expect(response.status).toBe(502);
     expect(response.headers.get('content-type')).toBe('application/problem+json');
     await expect(response.json()).resolves.toMatchObject({ code: 'upstream_unavailable' });
+  });
+
+  it('passes a 401 to a streamed POST through against a real server', async () => {
+    const upstream = createServer((req, res) => {
+      let body = '';
+      req.on('data', (chunk: Buffer) => (body += chunk.toString()));
+      req.on('end', () => {
+        res.writeHead(401, { 'content-type': 'application/problem+json' });
+        res.end(JSON.stringify({ status: 401, cookie: req.headers.cookie ?? null, body }));
+      });
+    });
+    await new Promise<void>((resolve) => upstream.listen(0, '127.0.0.1', resolve));
+    const { port } = upstream.address() as AddressInfo;
+    const origin = `http://127.0.0.1:${String(port)}`;
+    // Use the real fetch, which is where the 401 handling lives, and let it reach the server.
+    vi.unstubAllGlobals();
+    server.use(http.all(`${origin}/*`, () => passthrough()));
+    vi.stubEnv('API_INTERNAL_URL', origin);
+
+    try {
+      const response = await proxyToApi(
+        new Request('http://localhost:3000/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', cookie: 'st_csrf=abc' },
+          body: JSON.stringify({ email: 'a@b.co', password: 'wrong' }),
+        }),
+      );
+
+      expect(response.status).toBe(401);
+      await expect(response.json()).resolves.toEqual({
+        status: 401,
+        cookie: 'st_csrf=abc',
+        body: JSON.stringify({ email: 'a@b.co', password: 'wrong' }),
+      });
+    } finally {
+      await new Promise((resolve) => upstream.close(resolve));
+    }
   });
 });
