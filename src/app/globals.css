@@ -93,6 +93,8 @@
   --animate-twinkle: twinkle 6s ease-in-out infinite;
   --animate-drift: drift 40s linear infinite;
   --animate-breathe: breathe 4.5s ease-in-out infinite;
+  --animate-arc-draw: arc-draw 2.4s var(--ease-out-soft) both;
+  --animate-rise: rise 0.9s var(--ease-out-soft) both;
 
   @keyframes twinkle {
     0%,
@@ -110,6 +112,26 @@
     }
     to {
       transform: translate3d(-120px, 40px, 0);
+    }
+  }
+
+  @keyframes arc-draw {
+    from {
+      stroke-dashoffset: var(--arc-length, 1000);
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 18px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
     }
   }
 
