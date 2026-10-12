@@ -1,0 +1,15 @@
+.git
+.github
+.next
+node_modules
+coverage
+playwright-report
+test-results
+blob-report
+e2e/.auth
+docs
+*.tsbuildinfo
+.env*
+!.env.example
+Dockerfile
+docker-compose.yml
