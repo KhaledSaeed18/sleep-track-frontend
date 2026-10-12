@@ -151,7 +151,9 @@ export function clockDiff(actual: ClockTime, target: ClockTime): number {
 }
 
 export function relativeTime(iso: string): string {
-  return formatDistanceToNowStrict(parseISO(iso), { addSuffix: true });
+  const date = parseISO(iso);
+  if (Math.abs(Date.now() - date.getTime()) < 60_000) return 'just now';
+  return formatDistanceToNowStrict(date, { addSuffix: true });
 }
 
 export const WEEKDAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as const;

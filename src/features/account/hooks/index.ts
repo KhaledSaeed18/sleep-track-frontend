@@ -107,6 +107,6 @@ export function useDeleteAccount() {
   return useMutation({
     mutationFn: accountApi.deleteAccount,
     meta: { silent: true },
-    onSuccess: () => clearSession(queryClient),
+    onSuccess: () => clearSession(queryClient, '/login?deleted=1'),
   });
 }

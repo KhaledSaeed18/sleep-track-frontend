@@ -10,13 +10,15 @@ import { useAuthStore } from './auth-store';
 export function establishSession(queryClient: QueryClient, auth: AuthResponse): void {
   tokenStore.set(auth.access_token, auth.expires_in);
   queryClient.setQueryData(queryKeys.me, auth.user);
+  useAuthStore.getState().setSignedOutRedirect(null);
   useAuthStore.getState().setStatus('authenticated');
 }
 
 /** Clears every trace of the session on the client. */
-export function clearSession(queryClient: QueryClient): void {
+export function clearSession(queryClient: QueryClient, redirectTo: string | null = null): void {
   tokenStore.clear();
   deleteCookie(SESSION_HINT_COOKIE);
-  queryClient.clear();
+  useAuthStore.getState().setSignedOutRedirect(redirectTo);
   useAuthStore.getState().setStatus('guest');
+  queryClient.clear();
 }

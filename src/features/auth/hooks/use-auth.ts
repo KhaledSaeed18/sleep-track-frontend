@@ -81,31 +81,23 @@ export function useDemoLogin() {
 
 export function useLogout() {
   const queryClient = useQueryClient();
-  const router = useRouter();
   return useMutation({
     mutationFn: async () => {
       await authApi.logout().catch(() => undefined);
     },
     meta: { silent: true },
-    onSettled: () => {
-      clearSession(queryClient);
-      router.replace('/login');
-    },
+    onSettled: () => clearSession(queryClient, '/login'),
   });
 }
 
 export function useLogoutEverywhere() {
   const queryClient = useQueryClient();
-  const router = useRouter();
   return useMutation({
     mutationFn: async () => {
       await authApi.logoutAll();
       await authApi.logout().catch(() => undefined);
     },
-    onSuccess: () => {
-      clearSession(queryClient);
-      router.replace('/login?signed_out=all');
-    },
+    onSuccess: () => clearSession(queryClient, '/login?signed_out=all'),
   });
 }
 

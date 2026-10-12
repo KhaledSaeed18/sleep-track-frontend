@@ -31,6 +31,7 @@ interface TrendChartProps {
   domain?: [number | 'auto', number | 'auto'];
   height?: number;
   ticks?: number[];
+  series?: 0 | 1 | 2;
 }
 
 function dateTick(value: string, count: number) {
@@ -85,7 +86,7 @@ export default function TrendChart({
                 {
                   label: valueLabel,
                   value: typeof raw === 'number' ? format(raw) : 'Not logged',
-                  color: CHART.series[0],
+                  color: CHART.series[series],
                 },
               ]}
             />
@@ -112,7 +113,7 @@ export default function TrendChart({
           {common}
           <Bar
             dataKey="value"
-            fill={CHART.series[0]}
+            fill={CHART.series[series]}
             radius={CHART.barRadius}
             maxBarSize={CHART.maxBarSize}
             isAnimationActive={false}
@@ -124,11 +125,11 @@ export default function TrendChart({
           <Line
             dataKey="value"
             type="monotone"
-            stroke={CHART.series[0]}
+            stroke={CHART.series[series]}
             strokeWidth={2}
             dot={
               count <= 31
-                ? { r: 3, strokeWidth: 2, stroke: CHART.surface, fill: CHART.series[0] }
+                ? { r: 3, strokeWidth: 2, stroke: CHART.surface, fill: CHART.series[series] }
                 : false
             }
             activeDot={{ r: 5, strokeWidth: 2, stroke: CHART.surface }}

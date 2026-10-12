@@ -4,7 +4,7 @@ import { CloudOff } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, type ReactNode } from 'react';
 import { LogoMark } from '@/components/brand/logo';
-import { useAuthStatus, useCurrentUser } from '@/features/auth';
+import { useAuthStatus, useAuthStore, useCurrentUser } from '@/features/auth';
 
 function Splash({ label = 'Loading your nights' }: { label?: string }) {
   return (
@@ -30,9 +30,12 @@ export function AuthGate({
   const router = useRouter();
   const pathname = usePathname();
 
+  const signedOutRedirect = useAuthStore((state) => state.signedOutRedirect);
+
   useEffect(() => {
-    if (status === 'guest') router.replace(`/login?expired=1&next=${encodeURIComponent(pathname)}`);
-  }, [status, router, pathname]);
+    if (status !== 'guest') return;
+    router.replace(signedOutRedirect ?? `/login?expired=1&next=${encodeURIComponent(pathname)}`);
+  }, [status, router, pathname, signedOutRedirect]);
 
   if (status === 'offline' || (status === 'authenticated' && error && !user)) {
     return (
