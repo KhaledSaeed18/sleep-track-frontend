@@ -60,6 +60,7 @@ export function SessionsTable({
   busy = false,
 }: SessionsTableProps) {
   const fmt = useFormatters();
+  const currentYear = String(new Date().getFullYear());
   const allSelected = sessions.length > 0 && sessions.every((session) => selected.has(session.id));
   const someSelected = !allSelected && sessions.some((session) => selected.has(session.id));
 
@@ -114,9 +115,11 @@ export function SessionsTable({
                     <Link href={`/journal/${session.id}`} className="font-medium link-hover">
                       {fmt.localDate(session.night_of, 'EEE, MMM d')}
                     </Link>
-                    <div className="text-xs text-base-content/50">
-                      {fmt.localDate(session.night_of, 'yyyy')}
-                    </div>
+                    {!session.night_of.startsWith(currentYear) && (
+                      <div className="text-xs text-base-content/50">
+                        {fmt.localDate(session.night_of, 'yyyy')}
+                      </div>
+                    )}
                   </td>
                   <td className="tabular whitespace-nowrap text-base-content/75">
                     {fmt.time(session.started_at)} –{' '}
