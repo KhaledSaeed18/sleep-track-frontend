@@ -2,7 +2,6 @@
 
 import { Check, Laptop, Moon, Sun } from 'lucide-react';
 import { useThemePreference } from '@/features/account/hooks/use-theme-preference';
-import { useMounted } from '@/hooks/use-mounted';
 import { cn } from '@/lib/utils';
 import type { ThemePreference } from '@/types/models';
 
@@ -20,9 +19,7 @@ export function ThemeToggle({
   align?: 'end' | 'start' | 'top';
 }) {
   const [theme, setTheme] = useThemePreference();
-  const mounted = useMounted();
-  const current =
-    OPTIONS.find((option) => option.value === (mounted ? theme : 'system')) ?? OPTIONS[0]!;
+  const current = OPTIONS.find((option) => option.value === theme) ?? OPTIONS[0]!;
   const Icon = current.icon;
 
   return (
@@ -58,7 +55,7 @@ export function ThemeToggle({
             >
               <option.icon className="size-4" aria-hidden="true" />
               {option.label}
-              {mounted && theme === option.value && (
+              {theme === option.value && (
                 <Check className="ml-auto size-3.5 text-primary" aria-hidden="true" />
               )}
             </button>
