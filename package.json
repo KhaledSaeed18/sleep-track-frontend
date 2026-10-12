@@ -23,7 +23,8 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "api:generate": "openapi-typescript ${OPENAPI_SCHEMA:-../sleep-track-backend/docs/openapi.json} --default-non-nullable false -o src/types/api.d.ts",
-    "check": "pnpm lint && pnpm typecheck && pnpm test"
+    "check": "pnpm lint && pnpm typecheck && pnpm test",
+    "screenshots": "node scripts/screenshots.mjs"
   },
   "dependencies": {
     "@date-fns/tz": "^1.5.0",
