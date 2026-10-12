@@ -22,7 +22,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "api:generate": "openapi-typescript ${OPENAPI_SCHEMA:-../openapi.json} -o src/types/api.d.ts && prettier --write src/types/api.d.ts",
+    "api:generate": "openapi-typescript ${OPENAPI_SCHEMA:-../openapi.json} --default-non-nullable false -o src/types/api.d.ts",
     "check": "pnpm lint && pnpm typecheck && pnpm test"
   },
   "dependencies": {
