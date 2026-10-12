@@ -70,7 +70,7 @@ export function CommandPalette() {
       size="md"
       className="[&>header]:sr-only"
     >
-      <Command label="Command menu" className="-mx-3 -mt-3" loop>
+      <Command label="Command menu" className="-mx-3 pt-4" loop>
         <div className="mx-3 border-b border-(--hairline) pb-3">
           <Command.Input
             autoFocus
