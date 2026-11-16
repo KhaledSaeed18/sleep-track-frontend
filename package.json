@@ -65,11 +65,11 @@
     "jsdom": "^31.0.0",
     "msw": "^3.0.4",
     "openapi-typescript": "^7.13.0",
-    "prettier": "^3.9.10",
+    "prettier": "^3.10.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4.3.5",
     "typescript": "5.9.3",
-    "typescript-eslint": "^8.72.1",
+    "typescript-eslint": "^8.72.2",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^5.1.0"
   }
