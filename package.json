@@ -58,7 +58,7 @@
     "@vitejs/plugin-react": "^6.1.2",
     "@vitest/coverage-v8": "^5.1.0",
     "babel-plugin-react-compiler": "^1.0.0",
-    "daisyui": "^5.7.50",
+    "daisyui": "^5.8.0",
     "eslint": "^10.14.0",
     "eslint-config-next": "16.4.3",
     "eslint-config-prettier": "^10.1.8",
